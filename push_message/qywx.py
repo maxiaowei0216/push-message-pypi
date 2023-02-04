@@ -54,11 +54,13 @@ class QYWX:
             'msgtype': 'text',
             'agentid': int(kwargs.get('agent_id', 1000001)),
             'text': {"content": content},
-            'touser': str(kwargs.get('to_user', '@all'))
+            'touser': str(kwargs.get('to_user', ''))
         }
         if payload['touser'] != '@all':
             payload['toparty'] = kwargs.get('to_party', '')
             payload['totag'] = kwargs.get('to_tag', '')
+        if payload['touser'] == '' and payload['toparty'] == '' and payload['totag'] == '':
+            payload['touser'] = '@all'
         r = requests.post('https://qyapi.weixin.qq.com/cgi-bin/message/send',
                           params={'access_token': self.token}, json=payload)
         if r.status_code == 200:
